@@ -1,0 +1,28 @@
+{
+  "name": "bookstore-server",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/ShimantaBhuyan/bookstore-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShimantaBhuyan/bookstore-server.git"
+  },
+  "license": "ISC",
+  "author": "ShimantaKB",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.12.2",
+    "cors": "^2.8.5",
+    "dataloader": "^2.2.3",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "graphql": "^16.11.0",
+    "mongoose": "^8.16.0",
+    "pg": "^8.16.2",
+    "sequelize": "^6.37.7"
+  }
+}
