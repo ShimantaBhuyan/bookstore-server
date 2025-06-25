@@ -65,3 +65,5 @@ export const bookMutations = {
   createAuthor: async (_, { input }, ctx) => createAuthorHandler(ctx, input),
   addReview: async (_, { input }, ctx) => addReviewHandler(ctx, input),
 };
+
+export { createBookHandler, createAuthorHandler, addReviewHandler };

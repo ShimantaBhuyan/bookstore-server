@@ -46,3 +46,13 @@ node server.js
 ## API Endpoint
 
 - GraphQL endpoint: `http://localhost:4000/api`
+
+## Running Tests
+
+This project uses [Jest](https://jestjs.io/) for unit testing.
+
+### To run all tests:
+
+```
+pnpm run test
+```
