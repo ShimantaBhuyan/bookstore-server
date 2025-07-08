@@ -1,8 +1,12 @@
 import { Op, where } from "sequelize";
+import { validateQueryParams } from "../../utils/validation.js";
 // import { orgFilter } from "../../db/queryFragments/userQF.js";
 
 export const bookQueries = {
   books: async (_, { offset = 0, limit = 10, searchTerm, authorId }, ctx) => {
+    // Validate query parameters
+    validateQueryParams({ offset, limit, searchTerm, authorId });
+
     // const where = orgFilter(ctx);
     const where = {};
 
@@ -14,6 +18,11 @@ export const bookQueries = {
     }
 
     if (authorId) {
+      // Check if author exists
+      const author = await ctx.db.Author.findByPk(authorId);
+      if (!author) {
+        throw new Error(`Author with ID ${authorId} not found`);
+      }
       where.authorId = authorId;
     }
 
@@ -38,6 +47,9 @@ export const bookQueries = {
   },
 
   book: async (_, { id }, ctx) => {
+    // Validate query parameters
+    validateQueryParams({ id });
+
     const response = ctx.db.Book.findOne({
       where: {
         id: id,
@@ -57,6 +69,9 @@ export const bookQueries = {
   },
 
   author: async (_, { id }, ctx) => {
+    // Validate query parameters
+    validateQueryParams({ id });
+
     const response = ctx.db.Author.findByPk(id);
     const res = await response;
     return response;

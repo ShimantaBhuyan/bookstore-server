@@ -1,5 +1,20 @@
+import {
+  validateBookInput,
+  validateAuthorInput,
+  validateReviewInput,
+} from "../../utils/validation.js";
+
 // Handler for creating a book
 async function createBookHandler(ctx, input) {
+  // Validate input
+  validateBookInput(input);
+
+  // Check if author exists
+  const author = await ctx.db.Author.findByPk(input.authorId);
+  if (!author) {
+    throw new Error(`Author with ID ${input.authorId} not found`);
+  }
+
   const book = await ctx.db.Book.create({
     ...input,
     published_date: input.published_date
@@ -23,6 +38,9 @@ async function createBookHandler(ctx, input) {
 
 // Handler for creating an author
 async function createAuthorHandler(ctx, input) {
+  // Validate input
+  validateAuthorInput(input);
+
   const author = await ctx.db.Author.create({
     ...input,
     born_date: input.born_date
@@ -36,6 +54,15 @@ async function createAuthorHandler(ctx, input) {
 
 // Handler for adding a review
 async function addReviewHandler(ctx, input) {
+  // Validate input
+  validateReviewInput(input);
+
+  // Check if book exists
+  const book = await ctx.db.Book.findByPk(input.bookId);
+  if (!book) {
+    throw new Error(`Book with ID ${input.bookId} not found`);
+  }
+
   let metadata = await ctx.db.BookMetadata.findOne({ bookId: input.bookId });
   if (!metadata) {
     metadata = await ctx.db.BookMetadata.create({
@@ -44,6 +71,15 @@ async function addReviewHandler(ctx, input) {
       average_rating: 0,
     });
   }
+
+  // Check if user has already reviewed this book
+  const existingReview = metadata.reviews.find(
+    (review) => review.username === input.username
+  );
+  if (existingReview) {
+    throw new Error(`User ${input.username} has already reviewed this book`);
+  }
+
   metadata.reviews.push({
     username: input.username,
     rating: input.rating,
