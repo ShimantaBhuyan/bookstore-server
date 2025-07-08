@@ -13,7 +13,10 @@
   "main": "server.js",
   "scripts": {
     "dev": "node server.js",
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config=jest.config.js"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config=jest.config.js",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:migrate:status": "sequelize-cli db:migrate:status"
   },
   "dependencies": {
     "@apollo/server": "^4.12.2",
@@ -29,6 +32,7 @@
   "devDependencies": {
     "@jest/globals": "^30.0.3",
     "better-sqlite3": "^12.1.0",
-    "jest": "^30.0.3"
+    "jest": "^30.0.3",
+    "sequelize-cli": "^6.6.3"
   }
 }

@@ -12,7 +12,6 @@ import { resolvers } from "./graphql/resolvers.js";
 import { getAllModelLoaders } from "./db/modelDataLoaders/getAllModelLoaders.js";
 
 async function startServer() {
-  await sequelize.sync({ alter: true });
   const app = express();
 
   app.use(cors());

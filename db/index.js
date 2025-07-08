@@ -5,7 +5,9 @@ import Book from "./models/book.js";
 import BookMetadata from "./models/book_metadata.js";
 
 // Initialize Sequelize
-const sequelize = new Sequelize(process.env.DATABASE_URL, {});
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+});
 
 // Initialize Mongoose
 await mongoose.connect(process.env.MONGODB_URL);
