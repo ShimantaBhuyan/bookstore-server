@@ -68,9 +68,25 @@ export const typeDefs = `#graphql
     comment: String
   }
 
+  input EditBookInput {
+    id: ID!
+    title: String
+    description: String
+    cover_image_url: String
+  }
+
+  input EditAuthorInput {
+    id: ID!
+    name: String
+    biography: String
+    born_date: String
+  }
+
   type Mutation {
     createBook(input: BookInput!): Book!
     createAuthor(input: AuthorInput!): Author!
     addReview(input: ReviewInput!): BookMetadata!
+    editBook(input: EditBookInput!): Book!
+    editAuthor(input: EditAuthorInput!): Author!
   }
 `;

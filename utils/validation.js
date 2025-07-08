@@ -244,3 +244,51 @@ export const validateQueryParams = (params) => {
 
   return true;
 };
+
+export const validateEditBookInput = (input) => {
+  validators.required(input.id, "id");
+  validators.uuid(input.id, "id");
+
+  if (input.title !== undefined) {
+    validators.required(input.title, "title");
+    validators.string(input.title, "title", {
+      minLength: 1,
+      maxLength: 255,
+      trim: true,
+    });
+  }
+
+  if (input.description !== undefined) {
+    validators.string(input.description, "description", { maxLength: 5000 });
+  }
+
+  if (input.cover_image_url !== undefined) {
+    validators.url(input.cover_image_url, "cover_image_url");
+  }
+
+  return true;
+};
+
+export const validateEditAuthorInput = (input) => {
+  validators.required(input.id, "id");
+  validators.uuid(input.id, "id");
+
+  if (input.name !== undefined) {
+    validators.required(input.name, "name");
+    validators.string(input.name, "name", {
+      minLength: 1,
+      maxLength: 255,
+      trim: true,
+    });
+  }
+
+  if (input.biography !== undefined) {
+    validators.string(input.biography, "biography", { maxLength: 5000 });
+  }
+
+  if (input.born_date !== undefined) {
+    validators.date(input.born_date, "born_date");
+  }
+
+  return true;
+};

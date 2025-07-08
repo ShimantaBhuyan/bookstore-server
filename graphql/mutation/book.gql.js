@@ -2,6 +2,8 @@ import {
   validateBookInput,
   validateAuthorInput,
   validateReviewInput,
+  validateEditBookInput,
+  validateEditAuthorInput,
 } from "../../utils/validation.js";
 
 // Handler for creating a book
@@ -96,10 +98,81 @@ async function addReviewHandler(ctx, input) {
   return metadata;
 }
 
+// Handler for editing a book
+async function editBookHandler(ctx, input) {
+  // Validate input
+  validateEditBookInput(input);
+
+  // Check if book exists
+  const book = await ctx.db.Book.findByPk(input.id);
+  if (!book) {
+    throw new Error(`Book with ID ${input.id} not found`);
+  }
+
+  // Update only the fields that are provided
+  const updateData = {};
+  if (input.title !== undefined) updateData.title = input.title;
+  if (input.description !== undefined)
+    updateData.description = input.description;
+
+  await book.update(updateData);
+
+  // Update metadata if cover_image_url is provided
+  if (input.cover_image_url !== undefined) {
+    let metadata = await ctx.db.BookMetadata.findOne({ bookId: input.id });
+    if (!metadata) {
+      metadata = await ctx.db.BookMetadata.create({
+        bookId: input.id,
+        reviews: [],
+        average_rating: 0,
+        cover_image_url: input.cover_image_url,
+      });
+    } else {
+      metadata.cover_image_url = input.cover_image_url;
+      await metadata.save();
+    }
+  }
+
+  return book;
+}
+
+// Handler for editing an author
+async function editAuthorHandler(ctx, input) {
+  // Validate input
+  validateEditAuthorInput(input);
+
+  // Check if author exists
+  const author = await ctx.db.Author.findByPk(input.id);
+  if (!author) {
+    throw new Error(`Author with ID ${input.id} not found`);
+  }
+
+  // Update only the fields that are provided
+  const updateData = {};
+  if (input.name !== undefined) updateData.name = input.name;
+  if (input.biography !== undefined) updateData.biography = input.biography;
+  if (input.born_date !== undefined) {
+    updateData.born_date = input.born_date
+      ? new Date(input.born_date).toISOString()
+      : null;
+  }
+
+  await author.update(updateData);
+  return author;
+}
+
 export const bookMutations = {
   createBook: async (_, { input }, ctx) => createBookHandler(ctx, input),
   createAuthor: async (_, { input }, ctx) => createAuthorHandler(ctx, input),
   addReview: async (_, { input }, ctx) => addReviewHandler(ctx, input),
+  editBook: async (_, { input }, ctx) => editBookHandler(ctx, input),
+  editAuthor: async (_, { input }, ctx) => editAuthorHandler(ctx, input),
 };
 
-export { createBookHandler, createAuthorHandler, addReviewHandler };
+export {
+  createBookHandler,
+  createAuthorHandler,
+  addReviewHandler,
+  editBookHandler,
+  editAuthorHandler,
+};
