@@ -109,11 +109,20 @@ async function editBookHandler(ctx, input) {
     throw new Error(`Book with ID ${input.id} not found`);
   }
 
+  // If authorId is being changed, check if new author exists
+  if (input.authorId && input.authorId !== book.authorId) {
+    const author = await ctx.db.Author.findByPk(input.authorId);
+    if (!author) {
+      throw new Error(`Author with ID ${input.authorId} not found`);
+    }
+  }
+
   // Update only the fields that are provided
   const updateData = {};
   if (input.title !== undefined) updateData.title = input.title;
   if (input.description !== undefined)
     updateData.description = input.description;
+  if (input.authorId !== undefined) updateData.authorId = input.authorId;
 
   await book.update(updateData);
 

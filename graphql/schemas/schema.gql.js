@@ -72,6 +72,7 @@ export const typeDefs = `#graphql
     id: ID!
     title: String
     description: String
+    authorId: ID
     cover_image_url: String
   }
 
